@@ -6,12 +6,17 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
 jobs:
   backend-build-test:
     name: Backend (${{ matrix.service }})
     runs-on: ubuntu-latest
     env:
-      JWT_SECRET: ${{ secrets.JWT_SIGNING_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SIGNING_SECRET || 'ci-only-jwt-secret-for-tests-not-production' }}
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +38,7 @@ jobs:
       - name: Verify JWT_SECRET is set
         run: |
           if [ -z "${JWT_SECRET}" ]; then
-            echo "❌ JWT_SECRET is empty — was the repo secret configured?"
+            echo "❌ JWT_SECRET is empty."
             exit 1
           fi
           echo "✅ JWT_SECRET length: ${#JWT_SECRET}"
@@ -85,6 +90,7 @@ jobs:
         run: pnpm build
 
       - name: Attest build provenance
+        if: github.event_name != 'pull_request'
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: 'frontend/.next/**/*'

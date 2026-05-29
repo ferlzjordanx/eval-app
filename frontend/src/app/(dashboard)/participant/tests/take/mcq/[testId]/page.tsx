@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, use, useMemo } from 'react';
+import { useEffect, useState, use, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -97,7 +97,7 @@ export default function QuizTestPage({ params }: QuizTestPageProps) {
   }, [state]);
 
   // Auto-submit handler
-  const handleTimeExpired = useCallback(async () => {
+  const handleTimeExpired = async () => {
     toast.error('Time expired! Auto-submitting your quiz...');
 
     if (currentPart === 'A' && sessionId) {
@@ -105,7 +105,7 @@ export default function QuizTestPage({ params }: QuizTestPageProps) {
     } else if (currentPart === 'B' && sessionId) {
       await handleFinalSubmit();
     }
-  }, [currentPart, sessionId, answers]);
+  };
 
   const derivedTotalQuestions =
     typeof test?.number_of_questions === 'number' && test.number_of_questions > 0

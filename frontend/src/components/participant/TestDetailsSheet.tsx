@@ -36,7 +36,7 @@ interface InterviewTranscript {
   lambda_evaluation?: InterviewTranscriptEvaluation;
 }
 
-async function getInterviewTranscript(_submissionId: number): Promise<InterviewTranscript> {
+async function getInterviewTranscript(): Promise<InterviewTranscript> {
   throw new Error('Interview transcripts not available — candidate-built on W3 D13.');
 }
 import { formatTableDate } from '@/lib/utils/date';
@@ -100,7 +100,7 @@ export function ParticipantTestDetailsSheet({ test, open, onOpenChange }: Partic
 
     setLoadingTranscript(true);
     setTranscriptError(null);
-    getInterviewTranscript(submissionId)
+    getInterviewTranscript()
       .then((data) => {
         setTranscript(data);
         setLoadingTranscript(false);
@@ -704,11 +704,6 @@ function QuestionResultCard({ question, index }: { question: GradedQuizQuestion;
     easy: 'bg-green-100 text-green-800 border-green-200',
     medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     hard: 'bg-red-100 text-red-800 border-red-200',
-  };
-
-  const getOptionText = (optionId: number): string => {
-    const option = question.options?.find((opt) => opt.option_id === optionId);
-    return option?.text || `Option ${optionId}`;
   };
 
   return (
