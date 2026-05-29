@@ -12,7 +12,9 @@ import { getTestSessionBySubmission } from '@/lib/api/quiz-sessions';
 // Interview-transcript surface was removed in the PEP brownfield strip
 // (ai-interview-service is Phase 2). Candidates rebuild this on W3 D13–D14.
 interface InterviewTranscriptMessage {
+  role?: 'assistant' | 'user' | 'system';
   speaker?: string;
+  content?: string;
   text?: string;
   timestamp?: string;
 }
@@ -20,7 +22,7 @@ interface InterviewTranscriptMessage {
 interface InterviewTranscriptEvaluation {
   overall_score: number;
   score_breakdown: Record<string, number>;
-  skill_breakdown: Record<string, { score?: number }>;
+  skill_breakdown: Record<string, { score: number; proficiency_level?: string; feedback?: string }>;
   feedback?: string;
   strengths?: string[];
   improvements?: string[];
@@ -29,6 +31,7 @@ interface InterviewTranscriptEvaluation {
 }
 
 interface InterviewTranscript {
+  status?: string;
   messages: InterviewTranscriptMessage[];
   lambda_evaluation?: InterviewTranscriptEvaluation;
 }

@@ -58,3 +58,23 @@ gateway verifies the cookie's JWT on each request and forwards
 `.github/workflows/ci-pipeline.yml` runs build + test for the four
 backend services (matrix) and the frontend on every push / PR to
 `main`.
+
+## Local tests
+
+Backend services use `pytest` with per-service smoke and unit tests:
+
+```bash
+cd services/user-service && pytest
+cd services/test-management-service && pytest
+cd services/question-management-service && pytest
+cd services/api-gateway-service && pytest
+```
+
+Frontend checks:
+
+```bash
+cd frontend
+pnpm test
+pnpm lint
+pnpm build
+```
